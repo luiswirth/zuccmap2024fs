@@ -1,0 +1,9 @@
+lean
+lean4
+commulative
+curry-howard isomorphism
+type theory
+Rusell
+lambda
+Girard's paradox
+Russell's paradox

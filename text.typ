@@ -30,6 +30,8 @@ It's a very computational formulation of mathematics, which will lead to a const
 
 Not so suprising: Mathematicians such as Terrance Tao use Lean to formalize their complicated 100 page conjectures
 
+// Considering moving down the more comprehensive explanation of Math in AI / Lean in AI...
+// Especially the indepth RL part. Maybe at the end?
 More interesting: AI Math powered by Lean
 How does this work? LLM produces lean code.
 Not only is this a language/syntax for expressing math (already extremly important)
@@ -87,12 +89,15 @@ Keep on doing this giving you `Type 3`, `Type 4` and so on...
 This creates an infinte but countable hierarchy of so called *type universes*.
 These form a hierarchy, because in every higher type universe contains all the lower type universes as *objects*!
 This is the first characterization of Lean's type system.
-It features a countably infinte hierarchy of commulative type universes.
+It features a countably infinte hierarchy of cumulative type universes.
 `Type n` is strictly contained in the higher universe `Type (n+1)`.
 `Type n : Type (n+1)`
 
 This is probably very unused for you. Because in conventional programming languages
 you pretty much only work with the `Type 0` universe, also just called `Type`, which contains the Integers, Floats, Booleans and so on.
+
+But it allows for talking about higher-order types, such as `Nat -> Type`.
+This allows for further abstraction into infinity.
 
 But in lean this is necessary for this first class support of types.
 Because if it wouldn't be for this hierarchy. Then we would run into contradictions, such as *Girard's paradox*,
@@ -140,6 +145,8 @@ want to learn how to do some actual math with it and it is related to math.
 !!! The story of how lean came to be? Actually software verifier, but the same as math proofs!
 
 For this we will try to somehow find a way of formulating propositions as known from propositional logic using lean.
+
+!!!!!!! AVOID `Proof p` for explaining !!!!!
 
 Defined a type `Prop` for propositions (statements) and dependent type `Proof p` for proofs.
 Type constructors for usual logical connectors: `And, Or, Not, Implies`.
@@ -276,11 +283,7 @@ And especially the language and it's compiler. The smartest compiler i've ever s
 Can deduce incredible things and you can be extremly concise.
 Big metaprogramming is contained.
 
-
-= Questions to clearify:
-
-- Is it correct to say that `False` is a contradiction?
-  It's kinda confusing as `False` is a thing anyways,
-  while proof by contradiction is not a thing withou EM.
-- When explaining the Theorem proving in Lean there is this concept of `Proof p` which we will
-  get rid of later on, but for the time being: Is `Proof p` really a *dependent* type?
+Point to Further resources:
+- Theorem Proving in Lean4 Book
+- Lean Zulip
+- For AI in Math: Harmonic Podcast

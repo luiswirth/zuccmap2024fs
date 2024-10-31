@@ -1,9 +1,9 @@
 lean
 lean4
-commulative
-curry-howard isomorphism
 type theory
-Rusell
-lambda
+Curry-Howard isomorphism
 Girard's paradox
 Russell's paradox
+Prop
+lambda
+cumulative

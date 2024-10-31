@@ -1,8 +1,9 @@
-#set page(paper: "presentation-16-9", margin: 1cm)
-#set text(size: 16pt)
+#import "@preview/polylux:0.3.1": *
 
+#set page(paper: "presentation-16-9", margin: 1cm)
+
+#set text(size: 16pt)
 #set text(font: "New Computer Modern Sans")
-//#show math.equation: set text(font: "Fira Math Ultra")
 
 #set par(justify: true)
 
@@ -20,59 +21,92 @@
 #page(fill: white)[
   #set text(black)
   #set align(center + horizon)
-  #box(baseline: 35%)[#image("res/lean-codeine.jpg", width: 20%)]#text(80pt)[-4] \
+  #box(baseline: 35%)[#image("res/lean-codeine.jpg", width: 20%)]#text(80pt)[-] #text(80pt)[4] \
   #box(baseline: 35%)[#image("res/curry-food.jpg", width: 20%)] #text(80pt)[-]
-  #box(baseline: 40%)[#image("res/howard-bcs.png", width: 20%)] #h(1.0cm) #text(40pt)[Isomorphism].
+  #box(baseline: 40%)[#image("res/howard-bcs.png", width: 20%)] #h(1.0cm) #text(40pt)[Isomorphism]
 ]
 
-Foundations of math
+#polylux-slide[
+  = Introduction
 
-This is a talk on logic and type theory and how they related to programming
-languages and computation.
+  == The strongly-typed functional programming language Lean4
+  == Type Theory
+  == Foundations of math
 
+  This is a talk on logic and type theory and how they related to programming
+  languages and computation.
+]
 
-#pagebreak()
-= Motivational Stuff
-#v(1cm)
+#polylux-slide[
+  = Motivation
 
-Harmonic
-Math AI and the most general reasoner
-Mathematical superintelligence
-Solving Millenia problems such as Riemann Hypothesis and Navier-Stockes.
+  Terrance Tao formalizes his proofs
+]
 
-#pagebreak()
-= Introduction to Lean
+#polylux-slide[
+  AI in Math powered by Lean.
 
-```lean
-def m : Nat := 1       -- m is a natural number
-def n : Nat := 0
-def b1 : Bool := true  -- b1 is a Boolean
-def b2 : Bool := false
+  International Math Olympiad
+]
 
-#check m            -- output: Nat
-#check n
-#check n + 0        -- Nat
-#check m * (n + 0)  -- Nat
-```
+#polylux-slide[
+  Reasoner
+  RL
+  Mathematical Superintelligence
+  Millenium Problems
+]
 
-#pagebreak()
-= Example: Commutativity of $and$
-#v(1cm)
+#polylux-slide[
+  = Lean Basics
 
-The commutivity of the logical and operator $and$
-can be expressed as the following proposition: \
-For any two propositions $p$ and $q$, we have
-$
-  p and q -> q and p
-$
-In the calculus of constructions this means that we need to construct
-the type
-#align(center)[`p ∧ q → q ∧ p`]
+  Define some variables, by specifing name, type and value as expression.
+  ```lean
+  def m : Nat := 1
+  def n : Nat := 0
+  def b1 : Bool := true
+  def b2 : Bool := false
+  ```
+  #v(1cm)
+  #uncover("2-")[
+  Use `#check` command to deduce type of expression.
+  ```lean
+  #check m            -- Nat
+  #check b1           -- Bool
+  #check m * (n + 0)  -- Nat
+  #check b1 && b2     -- Bool
+  ```
+  ]
 
-```lean
-theorem and_commutative (p q : Prop) : p ∧ q -> q ∧ p :=
-  fun hpq : p ∧ q =>
-  have hp : p := And.left hpq
-  have hq : q := And.right hpq
-  show q ∧ p from And.intro hq hp
-```
+  #v(1cm)
+  #uncover(3)[
+  Use `#eval` command to evaluate expression to value.
+  ```lean
+  #eval 5 * 4         -- 20
+  #eval m + 2         -- 3
+  #eval b1 && b2      -- false
+  ```
+  ]
+]
+
+#polylux-slide[
+  = Example: Commutativity of $and$
+  #v(1cm)
+
+  The commutivity of the logical and operator $and$
+  can be expressed as the following proposition: \
+  For any two propositions $p$ and $q$, we have
+  $
+    p and q -> q and p
+  $
+  In the calculus of constructions this means that we need to construct
+  the type
+  #align(center)[`p ∧ q → q ∧ p`]
+
+  ```lean
+  theorem and_commutative (p q : Prop) : p ∧ q -> q ∧ p :=
+    fun hpq : p ∧ q =>
+    have hp : p := And.left hpq
+    have hq : q := And.right hpq
+    show q ∧ p from And.intro hq hp
+  ```
+]

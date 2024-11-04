@@ -2,10 +2,11 @@
 
 #set page(paper: "presentation-16-9", margin: 1cm)
 
-#set text(size: 16pt)
 #set text(font: "New Computer Modern Sans")
-
+#set text(size: 16pt)
 #set par(justify: true)
+
+//#show math.equation: set text(font: "Noto Sans Math")
 
 #let contentcolor = white
 #let bgcolor = black
@@ -15,6 +16,7 @@
 #let weblink(a) = text(fill: blue, link(a))
 
 #set raw(lang: "lean")
+
 //#show raw.where(block: false): box.with(
 //  //fill: black.lighten(10%),
 //  //stroke: black.lighten(10%),
@@ -37,36 +39,160 @@
   #align(center)[#image("res/talk-logo.jpg", height: 100%)]
 ]
 
-#page(fill: white)[
-  #set text(black)
-  #set align(center + horizon)
-  #box(baseline: 35%)[#image("res/lean-codeine.jpg", width: 20%)]#text(80pt)[-] #text(80pt)[4] \
-  #box(baseline: 35%)[#image("res/curry-food.jpg", width: 20%)] #text(80pt)[-]
-  #box(baseline: 40%)[#image("res/howard-bcs.png", width: 20%)] #h(1.0cm) #text(40pt)[Isomorphism]
+#polylux-slide[
+  = Why Lean matters
+
+  #align(center + horizon)[#grid(
+    columns: 2,
+    gutter: 10%,
+    align: center + horizon,
+    image("res/lieben-sie-lean.png", height: 60%),
+    image("res/lean-codeine.jpg", height: 60%),
+  )]
 ]
 
 #polylux-slide[
-  Lean is a programming language with a type system so powerful it's able to not
-  only express any mathematical statement but even check the validity any proof of
-  the statement.
+  = Why Lean matters
+  #v(1cm)
 
-  This is enabled by the ideas of type theory. Type theory can be used to build
-  a new *Foundation of Mathematics* by introducing a type-theoretic logic and
-  in this way type-theory is an alternative to set theory for constructing the
-  whole of mathematics. It's more fundamental then set theory.
+  #text(20pt)[
+    $ "Lean" = "Programming Language" + "Interactive Proof Assistant" $
+  ]
+  #pause
+  #v(1cm)
   
+  Allows us to do some groundbreaking things:
+  - _Express_ Mathematical Ideas using code.
+  - _Express_ Mathematical Proofs using code.
+  - _Verify_ the Proofs formally.
+  - Write in a cool ass programming language
+
+  #pause
+  #v(1cm)
+
+  #text(20pt)[
+    $ "Lean" = "Type Theory" + "Lambda-Calculus" $
+  ]
+  #pause
+  #v(0.5cm)
+
+  #text(20pt)[
+    $
+      "Type Theory" &#sym.arrow.squiggly "Type System/Checker" \
+      "Lambda-Calculus" &#sym.arrow.squiggly "Functional Programming"
+    $
+  ]
+]
+
+#polylux-slide[
+  = Why Type Theory matters
+  #pause
+  #v(1cm)
+
+  New *Foundation for Mathematics* beyond traditional set theory.\
+  Set Theory is actually not so nice...
+  #pause
+  #v(1cm)
+  // Set theory has become the standard foundation for mathematics, as
+  // every mathematical object can be viewed as a set, and every theorem of mathematics can be
+  // logically deduced in the Predicate Calculus from the axioms of set theory.
+  
+  *Curry-Howard Isomorphism* (CH) tells us that logic can be done in a type system!
+
+  
+  #only(3)[
+    #align(center + horizon)[
+      #box(baseline: 35%)[#image("res/curry-food.jpg", width: 20%)] #text(80pt)[-]
+      #box(baseline: 40%)[#image("res/howard-bcs.png", width: 20%)] #h(1.0cm) #text(40pt)[Isomorphism.]
+    ]
+  ]
+  #only("4-")[
+    #align(center)[#text(25pt)[
+      Propositions-as-Types\
+      Proofs-as-Programs\
+    ]]
+
+    #pause
+    #pause
+    #v(1cm)
+
+    Let's us write mathematical proofs as if we’re writing functions!\
+    Verifying Proof is just Typechecking! #emoji.face.explode
+  ]
+]
+
+#polylux-slide[
+  = Mathematicians use Lean
+  #v(1cm)
+
+  #quote(block: true, attribution: [Terence Tao, Fields Medalist and Professor of Mathematics, UCLA])[
+    *Lean enables large-scale collaboration* by allowing mathematicians to *break
+    down complex proofs* into smaller, verifiable components. This formalization
+    process *ensures the correctness of proofs* and facilitates contributions from
+    a broader community. With Lean, we are beginning to see *how AI can accelerate
+    the formalization of mathematics*, opening up new possibilities for research.
+  ]
 
 ]
 
 #polylux-slide[
-  = Motivation
+  = AI Breakthrough in Math, July 2024
+  #v(0.5cm)
 
-  Terrance Tao formalizes his proofs
+  #align(center)[#text(25pt)[
+    #quote[AI achieves silver-medal standard\
+    solving International Mathematical Olympiad problems]
+  ]]
+  #pause
 
-  Google DeepMind's *AlphaProof*
-  *International Math Olympiad*
+  // AlphaProof is a system that trains itself to prove mathematical statements
+  // in the formal language Lean. It couples a pre-trained language model with the
+  // AlphaZero reinforcement learning algorithm, which previously taught itself how
+  // to master the games of chess, shogi and Go.
+  // When presented with a problem, AlphaProof generates solution candidates and then
+  // proves or disproves them by searching over possible proof steps in Lean. Each
+  // proof that was found and verified is used to reinforce AlphaProof’s language
+  // model, enhancing its ability to solve subsequent, more challenging problems.
+
+  #grid(
+    columns: 2,
+    rows: 1,
+    gutter: 3pt,
+    align: center + horizon,
+    image("res/alphaproof-score.png", height: 50%),
+    [
+      #text(20pt)[*Google DeepMind*'s *AlphaProof*]
+      #quote(block: true, attribution:
+        [Prof Sir Timothy Gowers, *IMO gold medalist* and *Fields Medal winner*]
+      )[
+        The fact that the program can come up with a non-obvious construction like
+        this is very impressive, and well *beyond what I thought was state of the art*.
+      ]
+    ]
+  )
+
+  Soon (this or next year) Gold Medal probably.\
+  #pause
+
+  Maybe someday Millenium Problem?
 ]
 
+#polylux-slide[
+  = The Typing Judgment
+
+  // we have terms and we have types
+  // terms are just expressions
+  #v(3cm)
+  #align(center)[#text(60pt)[
+    $t : T$
+  ]]
+  #v(2cm)
+  // there is one important judgment in type theory:
+  #align(center)[#text(60pt)[
+    "$t$ is a term of type $T$"
+  ]]
+
+]
 
 #polylux-slide[
   = Lean is just a Programming Language!
@@ -469,35 +595,13 @@
 ]
 
 #polylux-slide[
-  = Generic Functions using `Type`
-  Another example.
-
-  ```lean
-  def compose (α β γ : Type) (g : β → γ) (f : α → β) (x : α) : γ :=
-    g (f x)
-  ```
-
-  #pause
-
-  ```cpp
-  template <typename A, typename B, typename C>
-  C compose(std::function<C(B)> g, std::function<B(A)> f, A x) {
-    return g(f(x));
-  }
-  ```
-  
-
-]
-
-#polylux-slide[
   = Type Constructors on `Type`
   Since `Type` is a type, we can use the type constructors we have seen so far on it.
   #pause
 
   A product type on `Type`:
   ```lean
-  def t1 : Type × Type    := (Nat, Bool)
-  def t2 : Prod Type Type := (String, Char)
+  def t : Type × Type    := (Nat, Bool)
   ```
   #pause
 
@@ -511,10 +615,14 @@
 #polylux-slide[
   Now we can understand what `Prod` is.
   ```lean
-  #check Prod               -- Type -> Type -> Type
-  #check Prod Int           -- Type -> Type
+  #check Int × Bool         -- Type
   #check Prod Int Bool      -- Type
+  #check Prod Int           -- Type -> Type
+  #check Prod               -- Type -> Type -> Type
   ```
+  #pause
+
+  Actually `Prod` is generic even over all type univeres.
   #pause
 
   C++ Struct
@@ -596,43 +704,60 @@
 
 #polylux-slide[
   = What's the use of Higher Order Types?
+  It's all about abstraction.
   #pause
   #v(0.5cm)
 
-  In other programming languages you only work within universe `Type 0`.\
-  This is where the types `Nat`, `Float` and their terms chill.\
-  Functions between them are also in this universe, such as `Nat -> Nat`.
+  Standard Type Universe `Type 0`.\
+  Data types: `Nat : Type 0`, `Float : Type 0`, ...\
+  Function Types on Data also `Nat -> Nat : Type 0`.
   #pause
+  #v(0.5cm)
 
-  We've also seen type constuctors such as `Prod : Type -> Type -> Type`.\
-  They are one level up in abstraction.\
-  They cannot live in the same universe, since otherwise they could describe themselves.\
-  They live in universe `Type 1` together, with all functions on `Type`.
+  One abstraction level higher: `Type 1`.\
+  `Type 0` itself: `Type 0 : Type 1`.\
+  Type constructors: `Type -> Type -> Type : Type 1`
   #pause
+  #v(0.5cm)
 
-  But what if we want to abstract over all type constructors?
-  Then we need universe `Type 2`.
+  Abstracting over all type constructors?\
+  `Type 2`!
   #pause
+  #v(0.5cm)
 
-  Arbitrary levels of abstraction are possible!
+  Arbitrary levels of abstraction are possible!\
+  `Type n`
 ]
 
 #polylux-slide[
-  = Girard's Paradox
-  Does the barber shave itself in type theory?
+  = Does the typed Barber shave itself?
+  #v(0.5cm)
 
-  You probably have all heard of Russell's Paradox from set theory.
-  Let $R = {x | x in.not x} $ then $R in R <==> R in.not R$ 
+  Why not just have one universe.\
+  One type to rule them all: The type of ALL types.
+  #pause
+  #v(0.5cm)
 
-  Or the Barber Paradox.
+  Oh oh. Russell is knocking on the door. And he has a Paradox for you.
+  #pause
 
-  To resolve this issue Russell actually invented simple type theory, but only one universe.
-  This will lead to a similar problem called *Girard's Paradox*.
+  #align(center)[$R = {x | x in.not x} $ then $R in R <==> R in.not R$ #emoji.lightning]
+  #pause
+  #v(0.5cm)
 
-  The solution is a _strict_ hierarchy of type universe,\
-  which doesn't allow for type universes to contain themselves.
+  Russell invented simple type theory!
+  #pause
+  #v(0.5cm)
+  // after the discovery russell invented simple type theory.
+  // with one type to rule them all, but this then lead
+  // to a type-theoretic version of the paradox.
+
+  *Girard's Paradox* is type-theoretic version of it.
+
+  Solution: _Strict_ hierarchy of type universes.\
+  No universe may contain itself.
   ```lean
-  def t0 : Type 0 := Type 0 -- ERROR: type mismatch: `Type` actually has type `Type 1`
+  def t : Type 0 := Type 0 -- ERROR: type mismatch: `Type 0` actually has type `Type 1`
   ```
 ]
 
@@ -641,11 +766,12 @@
   Spill the tea!
   #pause
 
-  Leverage the Type System!
-  #pause
+  Logical Interpretation of Type Theory .
 
-  *Mathematical Statements need to be types!*
+  Leverage the Type System!\
+  #sym.arrow.squiggly *Mathematical Statements need to be types!*
   #pause
+  #v(1cm)
 
   Start by expressing *Propositional Logic* using types.
   #table(
@@ -681,8 +807,19 @@
   #pause
   #v(1cm)
 
+  Types are propositions.
+  Terms are proofs/witnesses.
+
+  $t : T$ means $t$ is a witness to the truth of $T$.
+
+  There can be multiple distinct proofs/witnesses/terms of the same proposition.
+  But we don't care. *Proof-Irrellevance*. We only care about inhabitedness.
+
   The prove a proposition is to construct it's term!\
   And validating the proof is just typechecking the expression!
+
+  "$T$ is inhabited" $<=>$ there are terms of type $T$.
+  "$T$ is uninhabited" $<=>$ there are _no_ terms of type $T$.
 ]
 
 #polylux-slide[
@@ -762,7 +899,8 @@
 
   But introduction-only. No Elemination. It just exists.
 
-  It's the unit type (think 0-tuple) by CH.
+  It's the unit type by CH. It is _uniquely_ inhabited by
+  the 0-tuple `()`.
 ]
 
 #polylux-slide[
@@ -826,6 +964,8 @@
   = Curry-Howard Isomorphism for Propositional Logic
   #v(1cm)
 
+  // should be like summary slide!
+
   #table(
     columns: 4,
     inset: 6pt,
@@ -850,29 +990,56 @@
 #polylux-slide[
   = Predicate Logic in Lean
 
+  Unary Predicate can be represented as
   ```lean
-  def is_even (n : Nat) : Prop := n % 2 = 0
+  variable (α : Type) (p : α → Prop)
+  ```
+
+  Given `x : α`, then `p x` denotes the assertion that `p` holds of `x`.
+
+  `r : α → α → Prop` denotes a binary relation on `α`: given `x y : α` then,
+  `r x y` denotes the assertion that `x` is related to `y`.
+
+  ```lean
+  variable (men : Type) (barber : men)
+  variable (shaves : men → men → Prop)
+  example (h : ∀ x : men, shaves barber x ↔ ¬ shaves x x) : False :=
+    Classical.byCases
+      (λ hsbb ↦ absurd hsbb ((h barber).mp hsbb))
+      (λ hnsbb ↦ absurd ((h barber).mpr hnsbb) hnsbb)
   ```
 ]
 
 #polylux-slide[
-  = Universal Quantification "Forall"
+  = Universal Quantification $forall$
+  Called "Universal" because it's a big *conjunction over the whole type universe*!
 
-Universal Quantifier "Forall" => "Universal" because a big conjunction over the whole type universe!!!
-Really is just a function with arguments of the type into Prop.
-  
+  The forall quantifier `∀ x : Nat, p x` is really just a function `Nat -> Prop`
 ]
 
 #polylux-slide[
-  = Existential Quantification "Exists"
+  = Existential Quantification $exists$
 
-  
-Existance Quantifier "Existance" => Big disjunction over the whole universe.
-Existance is just $not forall$.
+  Existance Quantifier "Existance" => Big disjunction over the whole universe.
+
+  `∃ x, p x` is defined as `¬(∀ x, p x)`
+  Existance is just $not forall$.
 ]
 
 #polylux-slide[
-  = Constructive Math
+  = Constructive vs. Nonconstructive Math
+
+  Two types of logical arguments / proofs.
+
+  Example:
+
+  Is there an $x > 2$ such that $2^x = x^2$?
+
+  - Constructive: Yes, 4.
+  - Nonconstructive: Yes, because Intermediate Value theorem.
+
+  //A non-constructive proof of $"P" = "NP"$, would be very disappointing.
+  // As it wouldn't give a recipe for constructing such algorithms.
 
   The computational logic we looked at so far is completly constructive.
   Meaning that every existance proof made like this,
@@ -994,22 +1161,34 @@ complex systems, and to verify claims in both domains.
   ```
 ]
 
+#polylux-slide[
+  = Mathlib Showcase
+]
 
 #polylux-slide[
-  AI in Math powered by Lean.
+  = VScode Extension
+]
 
-  Reasoner
-  RL
-  Mathematical Superintelligence
-  Millenium Problems
+#polylux-slide[
+  = Further Reading
+  
+  "Theorem Proving in Lean4"
+  - https://leanprover-community.github.io/logic_and_proof
+
+  Some other resources:
+  - https://leanprover.github.io/theorem_proving_in_lean4/
+
+  Youtube:
+  - https://youtu.be/NvAxuCIBb-c?si=Nhs6o-79xwwMKA2Z
+    Why Vlad Tenev and Tudor Achim of Harmonic Think AI Is About to Change Math—and Why It Matters
+
+  - https://youtu.be/BdXWlQsd7RI?si=7ZhTNCOl6e3P12ds
+    Type Theory for the Working Rustacean - Dan Pittman
+
+  = Beyond "just" Type Theory: Homotopy Type Theory (HoTT) #emoji.face.explode
+  - https://youtube.com/playlist?list=PL245PKGUDdcN9-El9D7DRefwX4c9feiYq&si=RnAo2CUVPXfPNqkf
 ]
 
 #polylux-slide[
   = References
-  - https://leanprover-community.github.io/logic_and_proof
-  - https://leanprover.github.io/theorem_proving_in_lean4/
-  - https://youtu.be/NvAxuCIBb-c?si=Nhs6o-79xwwMKA2Z
-    Why Vlad Tenev and Tudor Achim of Harmonic Think AI Is About to Change Math—and Why It Matters
-  - https://youtu.be/BdXWlQsd7RI?si=7ZhTNCOl6e3P12ds
-    Type Theory for the Working Rustacean - Dan Pittman
 ]

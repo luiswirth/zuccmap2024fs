@@ -14,6 +14,25 @@
 
 #let weblink(a) = text(fill: blue, link(a))
 
+#set raw(lang: "lean")
+//#show raw.where(block: false): box.with(
+//  //fill: black.lighten(10%),
+//  //stroke: black.lighten(10%),
+//  inset: (x: 3pt, y: 0pt),
+//  outset: (y: 5pt),
+//  radius: 4pt,
+//)
+//#show raw.where(block: true): block.with(
+//  fill: black.lighten(5%),
+//  inset: (x: 3pt, y: 0pt),
+//  outset: 5pt,
+//  radius: 4pt,
+//)
+
+
+#let True = $top$
+#let False = $tack.t$
+
 #page(fill: white, margin: 0pt)[
   #align(center)[#image("res/talk-logo.jpg", height: 100%)]
 ]
@@ -27,12 +46,16 @@
 ]
 
 #polylux-slide[
-  = Introduction
+  Lean is a programming language with a type system so powerful it's able to not
+  only express any mathematical statement but even check the validity any proof of
+  the statement.
 
-  - Lean4 as a functional programming language.
-  - Type Theory and Type Systems
-  - Logic
-  - Foundations of Math
+  This is enabled by the ideas of type theory. Type theory can be used to build
+  a new *Foundation of Mathematics* by introducing a type-theoretic logic and
+  in this way type-theory is an alternative to set theory for constructing the
+  whole of mathematics. It's more fundamental then set theory.
+  
+
 ]
 
 #polylux-slide[
@@ -40,37 +63,47 @@
 
   Terrance Tao formalizes his proofs
 
-  International Math Olympiad
+  Google DeepMind's *AlphaProof*
+  *International Math Olympiad*
 ]
 
 
 #polylux-slide[
-  = Lean Basics
+  = Lean is just a Programming Language!
   #v(1cm)
   #pause
 
-  Lean is just a programming language.
-
-  #alternatives-match((
-    "3": [
+  #alternatives-match(position: top, (
+    "2": [
       Let's define some objects.
     ],
+    "3": [
+      Let's define some objects: constants!\
+      Specify *name*, *type* and *term*.
+      ```lean
+      def n : Nat   := 69
+      def z : Int   := -420
+      def f : Float := 8.0085
+      def b : Bool  := true
+      ```
+    ],
     "4-": [
-      Let's define some objects (constants), by specifing name, type and term.
+      Let's define some objects: constants!\
+      Specify *name*, *type* (optional) and *term*.
+      ```lean
+      def n         := 69
+      def z         := -420
+      def f         := 8.0085
+      def b         := true
+      ```
     ]
   ))
 
   #pause
   #pause
-  ```lean
-  def n : Nat   := 69
-  def z : Int   := -420
-  def f : Float := 8.0085
-  def b : Bool  := true
-  ```
   #pause
+  #v(0.5cm)
 
-  #v(1cm)
   Use `#check` command to deduce type of expression.
   ```lean
   #check n           -- Nat
@@ -78,12 +111,12 @@
   #check 5 * (n + 0) -- Nat
   ```
   #pause
+  #v(0.5cm)
 
-  #v(1cm)
   Use `#eval` command to evaluate expression to value.
   ```lean
   #eval 5 * 4 -- 20
-  #eval n + 2 -- 3
+  #eval n + 2 -- 71
   ```
 ]
 
@@ -98,13 +131,13 @@
   def p : Int × Bool := (2, true)
   #check p -- Int × Bool
   ```
-  It's two terms existing side by side.
-  Is like a tuple in a cartesian product.
   #pause
+  The two terms exist side by side.
+  #pause
+  #v(0.5cm)
 
-  There's a `C++` equivalent.
+  The `C++` equivalent:\
   #pause
-  
   A struct with two fields.
   ```cpp
   struct Prod {
@@ -116,22 +149,22 @@
 
 #polylux-slide[
   = Type Constructors
-  Build new types from existing types.
-  #pause
+  Another one, built different.
 
   *Sum Types*
   #pause
   ```lean
   def s0 : Int ⊕ Bool := Sum.inl 5
   def s1 : Int ⊕ Bool := Sum.inr true
-  #check s -- Int ⊕ Bool
+  #check s1 -- Int ⊕ Bool
   ```
+  #pause
   It's either the left or the right term.
   #pause
+  #v(0.5cm)
 
-  There's a `C++` equivalent.
+  The `C++` equivalent:\
   #pause
-
   #alternatives-match(position: left + top, (
     "5": [
       A union with two variants.
@@ -145,7 +178,7 @@
       ```
     ],
     "6": [
-      A tagged(!) union with two variants.
+      A _tagged_ union with two variants.
       ```cpp
       struct Sum {
         enum Variant { Left, Right } variant;
@@ -163,144 +196,222 @@
 
 #polylux-slide[
   = Functions in Lean
-  #v(1cm)
+  #v(0.5cm)
   #pause
 
-  Define a simple function.
+  Define a simple function (*Lambda Abstraction*):
   #pause
   ```lean
   def plus_one (x : Nat) : Nat := x + 1
   ```
+  Looks like argument-dependent constant.
   #pause
-  Argument-dependent constant.\
-  *Lambda Abstraction* / *Function Introduction*
+  #v(0.5cm)
 
+  Apply the function to an argument (*Lambda Application*):
   #pause
-  #v(1cm)
-
-  Apply the function to an argument.
   ```lean
   #eval plus_one 5 -- 6
   ```
-  No paranthesis needed.\
-  *Lambda Application* / *Function Elimination*
+  No paranthesis needed.
 ]
 
 #polylux-slide[
-  = Lean as functional programming language
-  Functions are first class citizens, meaning they are objects themselves.
+  = Lean is a _functional_ programming language!
+  Functions are first class objects.
   #v(0.5cm)
+
+  Consider our function:
   ```lean
   def plus_one (x : Nat) : Nat := x + 1
   ```
   #pause
   #v(0.5cm)
   
-  What is the type of our function?
-  ```lean
-  #check f -- Nat → Nat
-  ```
+  It's an object! What is it's type?\
+  #pause
+  #alternatives-match((
+    "3": [
+    ```lean
+    #check plus_one
+    ```
+    ],
+    "4-": [
+    ```lean
+    #check plus_one -- Nat → Nat
+    ```
+    ]
+  ))
+  #pause
   #pause
   #v(0.5cm)
 
-  The function arrow `→` is another type constructor. \
+  New type constructor just dropped: `→`\
+  #pause
   Given two types `A` and `B`, we get the new type `A → B`, consisting of all functions from `A` to `B`.
-  #pause
   #v(0.5cm)
 
-  There is another way to define a function using a lambda term of type `Nat → Nat`.
+  Different way to define a function:
+  #pause
   ```lean
   def plus_one : Nat → Nat := λ x ↦ x + 1
   #check (λ x ↦ x + 1) -- Nat → Nat
   ```
+  Directly using a lambda term of type `Nat → Nat`.
+
+  #pause
+  We sort of moved the "`:`" from right to left.
+
 ]
 
 #polylux-slide[
   = Higher-Order functions
   Functions with another function as argument.
+  #pause
+  #v(0.5cm)
 
-  We can write this function for instance.
-  ```lean
-  def twice (f : Nat -> Nat) (x : Nat) : Nat := f (f x)
-  #eval plus_one 5 -- 7
-  ```
+  We can write this function for instance:\
+  #alternatives-match(position: top, (
+    "2": [
+      ```lean
+      def do_twice (f : Nat → Nat) (x : Nat) : Nat :=
+        f (f x)
+      ```
+    ],
+    "3-": [
+      ```lean
+      def do_twice (f : Nat → Nat) (x : Nat) : Nat :=
+        f (f x)
+      #eval do_twice plus_one 5 -- 7
+      ```
+    ]
+  ))
+  #pause
+  #pause
+  #v(0.5cm)
 
-  ```lean
-  def compose (g : Nat → Nat) (f : Nat → Nat) (x : Nat) : Nat :=
-    g (f x)
+  In `C++`:
+  ```cpp
+  int do_twice(std::function<int(int)> f, int x) {
+    return f(f(x));
+  }
   ```
 ]
 
 #polylux-slide[
-  = Multiple function arguments and Currying
+  = Multiple Arguments
+  Functional Programmers like Curry #emoji.face.lick.
+  #pause
+  #v(0.5cm)
 
-  In non-functional languages multiple arguments are passed using tuples.
+
+  In non-functional languages:
+  #pause
+  With tuples!\
   ```lean
   def sum_tuple : Nat × Nat → Nat := λ (x, y) ↦ x + y
   ```
+  #pause
+  #v(1.0cm)
 
-  But in functional programming, one instead does *Currying*.
-  ```lean
-  def sum_curry : Nat → (Nat → Nat) := λ x ↦ λ y ↦ x + y
-  #check sum_curry      -- Nat -> Nat -> Nat
-  #check sum_curry 5    -- Nat -> Nat
-  #check sum_curry 5 6  -- Nat
-  #eval  sum_curry 5 6  -- 11
-  ```
-  We fix the first argument and return a function which accepts the second argument.\
-  We do so called *partial function application*.
+  Instead in functional languages:
+  Function Chain (*Currying*).\
+  #alternatives-match(position: top, (
+    "3": [
+      ```lean
+      def sum_curry : Nat → (Nat → Nat) := λ x ↦ λ y ↦ x + y
+      ```
+    ],
+    "4": [
+      ```lean
+      def sum_curry : Nat → (Nat → Nat) := λ x ↦ λ y ↦ x + y
+      #check sum_curry      -- Nat -> Nat -> Nat
+      ```
+    ],
+    "5": [
+      ```lean
+      def sum_curry : Nat → (Nat → Nat) := λ x ↦ λ y ↦ x + y
+      #check sum_curry      -- Nat -> Nat -> Nat
+      #check sum_curry 5    -- Nat -> Nat
+      ```
+    ],
+    "6": [
+      ```lean
+      def sum_curry : Nat → (Nat → Nat) := λ x ↦ λ y ↦ x + y
+      #check sum_curry      -- Nat -> Nat -> Nat
+      #check sum_curry 5    -- Nat -> Nat
+      #check sum_curry 5 6  -- Nat
+      ```
+    ],
+    "7-": [
+      ```lean
+      def sum_curry : Nat → (Nat → Nat) := λ x ↦ λ y ↦ x + y
+      #check sum_curry      -- Nat -> Nat -> Nat
+      #check sum_curry 5    -- Nat -> Nat
+      #check sum_curry 5 6  -- Nat
+      #eval  sum_curry 5 6  -- 11
+      ```
+    ]
+  ))
+
+  #pause
+  #pause
+  #pause
+  #pause
+  Allows for *partial function application*.
 ]
 
 
 #polylux-slide[
-  = First Class Types
-  Types are objects themselves!
+  = Types as Objects!
+  We can declare new constants for types.
   #pause
 
-  Declare new constants for types.
   ```lean
   def α := Nat
   def β := Bool
   ```
   #pause
 
-  We can use it to specify the type of a "normal" constant.
+  We can use it to specify the type of a "data" constant.
   ```lean
   def n : α := 5
   ```
+  #pause
+  #v(0.5cm)
 
+  Actually not so crazy. In `C++` one can also define type constants.
   #pause
 
-  Nothing too crazy.
-  It's like template parameters in `C++`:
-  #pause
   ```cpp
-  template <typename T>
-  struct { T n; };
+  using T = int;
+  T n;
   ```
   #pause
 
-  But in Lean it's more streamlined.\
-  It's treated like any other variable.
+  But this is not really an object. Not as flexible.\
+  In Lean this is like any other object.
 ]
 
 #polylux-slide[
-  = Types as Objects
+  = But every object must have a type...
   #v(1cm)
 
+  Given that this is an object.
   ```lean
   def α := Nat
   ```
+  #pause
 
-  But what is the type of `α`?
+  What is it's type?
 
   #alternatives-match((
-    "1": [
+    "2": [
     ```lean
     #check α
     ```
     ],
-    "2-": [
+    "3-": [
     ```lean
     #check α -- Type
     ```
@@ -323,20 +434,38 @@
   We can take a `Type` argument to make a function generic.
   #pause
 
-  ```lean
-  def twice (α : Type) (f : α → α) (x : α) : α :=
-    f (f x)
-  ```
+  
+  #alternatives-match(position: top, (
+    "2": [
+      ```lean
+      def do_twice (f : Nat → Nat) (x : Nat) : Nat :=
+        f (f x)
+      ```
+    ],
+    "3-": [
+      ```lean
+      def do_twice (α : Type) (f : α → α) (x : α) : α :=
+        f (f x)
+      ```
+    ],
+  ))
+
   #pause
+  #pause
+  #v(0.5cm)
 
-  This is like `C++` generics but more powerful:
-
+  In `C++` we can do generics using templates:
   ```cpp
   template <typename T>
-  T twice(std::function<T(T)> f, T x) {
+  T do_twice(std::function<T(T)> f, T x) {
     return f(f(x));
   }
   ```
+  #pause
+
+  But here `C++` makes a big distinction between type variables
+  and normal variables.\
+  Lean doesn't. It's like any other object.
 ]
 
 #polylux-slide[
@@ -433,12 +562,12 @@
   #check Type 3   -- Type 4
   -- ...
   ```
-  We've stumbled upon the infintely many, but countable type univeres.
+  We've stumbled upon the infintely many, but countable *type universes*.
 ]
 
 #polylux-slide[
-  The universes form a hierarchy.
-  Because each lower type universe is a term in it's next higher type universe.
+  = Hierarchy of Type Universes
+  Each lower type universe is a term in it's next higher type universe.
   ```lean
   def t0 : Type 0 := Nat
   def t1 : Type 1 := Type 0
@@ -447,109 +576,254 @@
   -- ...
   ```
   In general `Type n : Type (n+1)`.
+  #pause
+  #v(0.5cm)
 
-  Brainfuck?
-
-  Useful for having higher abstraction levels.
-  We can define more and more abstract functions.
-]
-
-#polylux-slide[
-  = Girard's Paradox
-
-  This hierarchy is strict and doesn't allow for type universes to contain themselves.
-  ```lean
-  def t0 : Type 0 := Type 0 -- ERROR: type mismatch: `Type` actually has type `Type 1`
-  ```
-
-  This avoids *Girard's paradox*, which is a type-theoretic version of the
-  set-theoretic *Russell's paradox*.
-]
-
-#polylux-slide[
-  = Hierarchy of Type Universes
+  The distinction between universe, type and term becomes blurry.\
+  It depends on the context.
 
   #table(
-    columns: 5,
+    columns: 6,
     //rows: 3,
     inset: 6pt,
     align: horizon,
     stroke: contentcolor,
-    [*Sort*], [Type 0], [Type 1], [Type 2], [Type 3],
-    [*Type*], [Nat], [Type 0], [Type 1], [Type 2],
-    [*Term*], [1], [Nat], [Type 0], [Type 1],
+    [*Universe*], [Type 0], [Type 1], [Type 2], [Type 3], $dots.c$,
+    [*Type*], [Nat], [Type 0], [Type 1], [Type 2], $dots.c$,
+    [*Term*], [1], [Nat], [Type 0], [Type 1], $dots.c$,
   )
-
-  In this sense type objects in Lean can both be a type or a term depending on the context.
-  
 ]
 
 #polylux-slide[
-  Now after looking at some basic type theory and lambda calculus in Lean.
-  We want to figure out, how to do math with this!
+  = What's the use of Higher Order Types?
+  #pause
+  #v(0.5cm)
 
-  We want to leverage the powerful type system to do the proof verification for us.
-  In order for this to work, we first to express mathematical statements using types.
+  In other programming languages you only work within universe `Type 0`.\
+  This is where the types `Nat`, `Float` and their terms chill.\
+  Functions between them are also in this universe, such as `Nat -> Nat`.
+  #pause
 
-  We will start with basic propositional logic.
-  The first step is to define a new type that represents all possible propositions.
-  We will call this type `Prop`.
+  We've also seen type constuctors such as `Prod : Type -> Type -> Type`.\
+  They are one level up in abstraction.\
+  They cannot live in the same universe, since otherwise they could describe themselves.\
+  They live in universe `Type 1` together, with all functions on `Type`.
+  #pause
 
-  Now we can introduce variables called `p` and `q` which are of type `Prop`.
-  In propositional logic one can use two propositional statements and use
-  logical connectices to build new ones.
+  But what if we want to abstract over all type constructors?
+  Then we need universe `Type 2`.
+  #pause
 
-  $p and q$ $p or q$ $p -> q$
+  Arbitrary levels of abstraction are possible!
 ]
 
 #polylux-slide[
-  = Implication
+  = Girard's Paradox
+  Does the barber shave itself in type theory?
 
-  
-  Modus Ponens
-  Implication Elimination
-  Function Application
+  You probably have all heard of Russell's Paradox from set theory.
+  Let $R = {x | x in.not x} $ then $R in R <==> R in.not R$ 
 
-  "From a proof of Implies p q and a proof of p, we obtain a proof of q."
+  Or the Barber Paradox.
 
-  Implication Introduction
-  Function Abstraction
-  "Suppose that, assuming p as a hypothesis, we have a proof of q. Then we can "cancel" the hypothesis and obtain a proof of Implies p q."
+  To resolve this issue Russell actually invented simple type theory, but only one universe.
+  This will lead to a similar problem called *Girard's Paradox*.
+
+  The solution is a _strict_ hierarchy of type universe,\
+  which doesn't allow for type universes to contain themselves.
+  ```lean
+  def t0 : Type 0 := Type 0 -- ERROR: type mismatch: `Type` actually has type `Type 1`
+  ```
 ]
 
 #polylux-slide[
-  And, Or
+  = How to do Math in Lean?
+  Spill the tea!
+  #pause
 
-  = Example: Commutativity of $and$
+  Leverage the Type System!
+  #pause
+
+  *Mathematical Statements need to be types!*
+  #pause
+
+  Start by expressing *Propositional Logic* using types.
+  #table(
+    columns: 2,
+    align: (left, center),
+    inset: 7pt,
+    stroke: contentcolor,
+    [Conjunction], $p and q$,
+    [Disjunction], $p or q$,
+    [Implication], $p -> q$,
+    [Negation], $not p$,
+    [True], $True$,
+    [False], $False$,
+  )
+]
+
+#polylux-slide[
+  = Propositions in Lean
+  New Type Universe just dropped: `Prop`\
+  Universe of all logical propositions.
+  #pause
+
+  *Types in `Prop` are propositions.*\
+  For example: `p : Prop` and `q : Prop`.
+  #pause
   #v(1cm)
 
-  The commutivity of the logical and operator $and$
-  can be expressed as the following proposition: \
-  For any two propositions $p$ and $q$, we have
-  $
-    p and q -> q and p
-  $
-  In the calculus of constructions this means that we need to construct
-  the type
-  #align(center)[`p ∧ q → q ∧ p`]
+  What's the meaning of terms in this universe?\
+  For example: `hp : p` and `hq : q`?
+  #pause
+
+  Herein lies the magic! *A term is a proof*!
+  #pause
+  #v(1cm)
+
+  The prove a proposition is to construct it's term!\
+  And validating the proof is just typechecking the expression!
+]
+
+#polylux-slide[
+  = Functions between Propositions
+  We have our two propositions
+  ```lean
+  variable (p q : Prop)
+  ```
+  What is the meaning of a function `f : p → q`?
+  #pause
+
+  Syntactically looks like implication...
+  #pause
+
+  Also semantically the same! How?
+  #pause
+  #v(1cm)
+
+  Given proof `hp : p` and function `f : p → q`,
+  we can get `hq : q := f hp`!\
+  Known as *modus ponens* or *implication elimination*.
+  #pause
+
+  How to do *implication introduction*?\
+  Create a function `f : p → q` by assuming `hp : p`
+  and deriving `hq : q`.
+  #pause
+  #v(1cm)
+
+  First instance of *Curry-Howard Isomorphism* (CH)!\
+  Functions are Implications.
+]
+
+#polylux-slide[
+  = Logical Conjunction $p and q$
+  What is the corresponding type?
+  #pause
+  
+  Type combining to terms of type `p` and `q`?
+  #pause
+
+  Product Type `p × q` by CH!
+  #pause
+
+  Illustrate at example!
+  ```lean
+  theorem and_commutative (p q : Prop) : p ∧ q → q ∧ p :=
+    λ hpq : p ∧ q ↦ And.intro hpq.right hpq.left
+  ```
+]
+
+#polylux-slide[
+  = Logical Disjunction $p or q$
+  What is the corresponding type?
+  #pause
+
+  Sum Type `p ⊕ q` by CH!
+  #pause
+  
+  ```lean
+  theorem or_commutative (p q : Prop) : p ∨ q → q ∨ p :=
+    λ hpq : p ∨ q ↦ 
+      hpq.elim
+        (λ hp ↦ Or.inr hp)
+        (λ hq ↦ Or.inl hq)
+  ```
+]
+
+#polylux-slide[
+  = Logical Constant `True`
+  
+  `True` is simply true.\
+  Get Proof for free:
+  ```lean
+  def t : True := True.intro
+  ```
+
+  But introduction-only. No Elemination. It just exists.
+
+  It's the unit type (think 0-tuple) by CH.
+]
+
+#polylux-slide[
+  = Logical Constant `False`
+
+  Represents a contradiction. You shouldn't be able to obtain.
+  ```lean
+  def f : False := -- impossible
+  ```
+
+  Opposite of `True`:\
+  No introduction. Elemination-Only.
+
+  Most powerful elimination. Anything follows from a contradiction / `False`.
+  ```lean
+  false.elim : ∀ (q : Prop), False → q
+  ```
+
+  If we include `False` as axiom in our type system, it becomes *unsound*.
+  ```lean
+  axiom false : False
+  variable (q : Prop)
+  theorem hq : q := false.elim
+  ```
+
+  Is empty type by CH. The uninhabitated type, that has no terms.
+
+  Even though no introduction, still appears in formula.
+  
+  ```lean
+  example : p ∨ False ↔ p := Iff.intro
+    (λ h ↦ h.elim
+      (λ hp ↦ hp)
+      (λ hf ↦ False.elim hf)
+    )
+    (λ hp ↦ Or.inl hp)
+
+  example : p ∧ False ↔ False := Iff.intro
+    (λ hpf ↦ hpf.right)
+    (λ hf ↦ hf.elim)
+
+  ```
+]
+
+#polylux-slide[
+  = Logical Negation
+
+  Negation $not p$ in Lean is defined as `p -> False`.
+
+  How introduction and how elemination?
+
+  If you got a `hp : p` and a `hnp : p -> False` you would obtain a contradiction.
 
   ```lean
-  theorem and_commutative (p q : Prop) : p ∧ q -> q ∧ p :=
-    fun hpq : p ∧ q =>
-    have hp : p := And.left hpq
-    have hq : q := And.right hpq
-    show q ∧ p from And.intro hq hp
+  example : (p → q) → (¬q → ¬p) :=
+    λ hpq ↦ λ hnq ↦ λ hp ↦ hnq (hpq hp)
   ```
-  
 ]
 
 #polylux-slide[
-  True, False
-]
-
-
-#polylux-slide[
-  = Curry-Howard Isomorphism
+  = Curry-Howard Isomorphism for Propositional Logic
   #v(1cm)
 
   #table(
@@ -568,26 +842,13 @@
     [Not], $not A$, $A -> tack.t$, [Function to Empty Type],
     [And / Conjunction], $A and B$, $A times B$, [Product Type],
     [Or / Disjunction], $A or B$, $A + B$, [Sum Type],
-    [For All / Universal Quantification], $forall a in A, P(a)$, $Pi a : A. space P(a)$, [Dependent Product Type],
-    [Exists / Existential Quantification], $exists a in A, P(a)$, $Sigma a : A. space P(a)$, [Dependent Sum Type],
+    //[For All / Universal Quantification], $forall a in A, P(a)$, $Pi a : A. space P(a)$, [Dependent Product Type],
+    //[Exists / Existential Quantification], $exists a in A, P(a)$, $Sigma a : A. space P(a)$, [Dependent Sum Type],
   )
 ]
 
-#table(
-  columns: 2,
-  inset: 5pt,
-  align: horizon,
-  stroke: contentcolor,
-  table.header(
-    [*Logic*], [*Programming*]
-  ),
-  [hypotheses], [free variables],
-  [implication elimination (modus ponens)], [function application],
-  [implication introduction], [function abstraction],
-)
-
 #polylux-slide[
-  = Predicate Logic
+  = Predicate Logic in Lean
 
   ```lean
   def is_even (n : Nat) : Prop := n % 2 = 0
@@ -596,21 +857,110 @@
 
 #polylux-slide[
   = Universal Quantification "Forall"
+
+Universal Quantifier "Forall" => "Universal" because a big conjunction over the whole type universe!!!
+Really is just a function with arguments of the type into Prop.
+  
 ]
 
 #polylux-slide[
   = Existential Quantification "Exists"
+
+  
+Existance Quantifier "Existance" => Big disjunction over the whole universe.
+Existance is just $not forall$.
 ]
 
 #polylux-slide[
   = Constructive Math
-  Law of Excluded Middle
+
+  The computational logic we looked at so far is completly constructive.
+  Meaning that every existance proof made like this,
+  would result in a construction of the postulated object.
+  
+  This is in contrast to Classical Logic, which is usally used
+  in university courses.
+
+  The only difference between the two is one axiom!
+  The *Law of Excluded Middle* (EM).
+  It assumes that $p or not p$ is true.
+  So it creates a term of type `p or not p` out of thin air.
+
+  Using it we can prove double negation, as well as the proof pattern
+  of proof by contradiction. (only possible in classical logic!).
+
+  Proofs involving EM might not construct the mathematical object at hand.
+  But only proof that such an object exists.
+
+  
+Explained Lean's constructive mathematics—each proof explicitly constructs what it claims exists.
+
+Constructive/Intuistionic vs Classical Logic.
+
+There is a single axiom that governs this:
+*Law of Excluded Middle* (EM)
+Double Negation
+Binary Logic and Philosphical Implications
+Non-constructive Existence Proofs
+Proof by contradiction.
+Proof by case distinction
+De Morgan's law
+
+
+
+Because the law of excluded middle does not hold, there is no term of type
+$Pi a. space A + (A -> tack.t)$. Likewise, double
+negation does not hold, so there is no term of type 
+$Pi A. space ((A -> tack.t) -> tack.t) -> A$.
+
+It is possible to include the law of excluded middle and double negation into
+a type theory, by rule or assumption. However, terms may not compute down to
+canonical terms and it will interfere with the ability to determine if two terms
+are judgementally equal to each other.
+WHAT DOES THIS MEAN?
+
+Constructive Mathematics is powerful in the sense that there is always a computational recipe for
+creating the stipulated mathematical object.
+But it's also less powerful in the sense, that fewer mathematical statements can be proven this way.
+
+An example of a non-constructive proof is proof by contradiction. The first
+step is assuming that $x$ does not exist and refuting it by contradiction.
+The conclusion from that step is "it is not the case that $x$ does not exist".
+The last step is, by double negation, concluding that $x$ exists. Constructive
+mathematics does not allow the last step of removing the double negation to
+conclude that $x$ exists.
+
+Lean supports both and does a seperation of concerns.
+Lean supports classical reasoning through the `Classical` namespace. `open Classical`
 ]
 
+#polylux-slide[
+Relation known from set theory. But relations are more fundamental and can be formulated directly
+in logic/type theory.
+Define relation as`alpha -> alpha -> Prop`
 
+
+Define Aequivalence Relation in Lean Code:
+- Reflexiv
+- Symmetric
+- Transitive
+
+]
 
 #polylux-slide[
   = Tactic Mode
+
+  
+So far we've only seen Lean in *term-mode*. But actually for writing more complicated proofs,
+this is used only very rarely. Instead there is *tactic-mode*.
+Here the *automated proof writing* of lean comes into play.
+
+
+The Lean Theorem Prover aims to bridge the gap between interactive and automated
+theorem proving, by situating automated tools and methods in a framework that
+supports user interaction and the construction of fully specified axiomatic
+proofs. The goal is to support both mathematical reasoning and reasoning about
+complex systems, and to verify claims in both domains.
 
   In tactic mode:
   ```lean
@@ -658,6 +1008,8 @@
   = References
   - https://leanprover-community.github.io/logic_and_proof
   - https://leanprover.github.io/theorem_proving_in_lean4/
-  - https://www.youtube.com/watch?v=NvAxuCIBb-c
+  - https://youtu.be/NvAxuCIBb-c?si=Nhs6o-79xwwMKA2Z
     Why Vlad Tenev and Tudor Achim of Harmonic Think AI Is About to Change Math—and Why It Matters
+  - https://youtu.be/BdXWlQsd7RI?si=7ZhTNCOl6e3P12ds
+    Type Theory for the Working Rustacean - Dan Pittman
 ]

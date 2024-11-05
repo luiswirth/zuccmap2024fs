@@ -90,7 +90,8 @@
   #v(1cm)
 
   New *Foundation for Mathematics* beyond traditional set theory.\
-  Set Theory is actually not so nice...
+  "Set Theory is actually not so nice..." - Some Category Theorist probably
+
   #pause
   #v(1cm)
   // Set theory has become the standard foundation for mathematics, as
@@ -126,11 +127,10 @@
   #v(1cm)
 
   #quote(block: true, attribution: [Terence Tao, Fields Medalist and Professor of Mathematics, UCLA])[
-    *Lean enables large-scale collaboration* by allowing mathematicians to *break
-    down complex proofs* into smaller, verifiable components. This formalization
-    process *ensures the correctness of proofs* and facilitates contributions from
-    a broader community. With Lean, we are beginning to see *how AI can accelerate
-    the formalization of mathematics*, opening up new possibilities for research.
+    Lean enables *large-scale collaboration* by *breaking down complex proofs* into smaller parts.\
+    Lean also *ensures the correctness of proofs*.\
+    With Lean we begin to see *how AI can accelerate the formalization of
+    mathematics*, opening up new possibilities for research.
   ]
 
 ]
@@ -162,6 +162,8 @@
     image("res/alphaproof-score.png", height: 50%),
     [
       #text(20pt)[*Google DeepMind*'s *AlphaProof*]
+      #pause
+
       #quote(block: true, attribution:
         [Prof Sir Timothy Gowers, *IMO gold medalist* and *Fields Medal winner*]
       )[
@@ -170,6 +172,7 @@
       ]
     ]
   )
+  #pause
 
   Soon (this or next year) Gold Medal probably.\
   #pause
@@ -384,10 +387,6 @@
   #check (λ x ↦ x + 1) -- Nat → Nat
   ```
   Directly using a lambda term of type `Nat → Nat`.
-
-  #pause
-  We sort of moved the "`:`" from right to left.
-
 ]
 
 #polylux-slide[
@@ -599,42 +598,46 @@
   Since `Type` is a type, we can use the type constructors we have seen so far on it.
   #pause
 
-  A product type on `Type`:
-  ```lean
-  def t : Type × Type    := (Nat, Bool)
-  ```
-  #pause
-
-  Function arrow can also be used.
+  Function arrow type constructor can be used.\
+  A function on types.
   ```lean
   def f : Type → Type := λ _ => Nat
   ```
-  The constant function returning `Nat`.
-]
-
-#polylux-slide[
-  Now we can understand what `Prod` is.
-  ```lean
-  #check Int × Bool         -- Type
-  #check Prod Int Bool      -- Type
-  #check Prod Int           -- Type -> Type
-  #check Prod               -- Type -> Type -> Type
-  ```
   #pause
+  #v(1cm)
 
-  Actually `Prod` is generic even over all type univeres.
   #pause
+  #grid(
+    columns: 2,
+    gutter: 3cm,
+  [
+    Now we can understand what `Prod` is.
+    ```lean
+    #check Int × Bool         -- Type
+    #check Prod Int Bool      -- Type
+    #check Prod Int           -- Type -> Type
+    #check Prod               -- Type -> Type -> Type
+    ```
+  ],
+  [
+    #pause
+    In `C++` using generics.
+    ```cpp
+    template <typename L, typename R>
+    struct Prod {
+      L l;
+      R r;
+    }
 
-  C++ Struct
-  ```cpp
-  template <typename L, typename R>
-  struct Prod {
-    L l;
-    R r;
-  }
+    Prod<int, bool> p;
+    ```
+  ])
 
-  Prod<int, bool> p;
-  ```
+  #text(12pt)[
+    Note:\
+    Actually `Prod` is even more general, and could also take `Type` as argument.\
+    We could have `Prod Type Type`. It abstracts over "type universes".
+  ]
 ]
 
 #polylux-slide[
@@ -648,19 +651,31 @@
   ```
   #pause
 
-  What is the type of this constant?
-  ```lean
-  #check t -- Type 1
-  ```
-
+  What is the type of this constant?\
+  #alternatives-match((
+    "3": [
+      ```lean
+      #check t
+      ```
+    ],
+    "4-": [
+      ```lean
+      #check t -- Type 1
+      ```
+    ]
+  ))
   #pause
+  #pause
+
   So there's a new type, called `Type 1`. It once again must be an object.
+  #pause
+
   ```lean
   def t1 := Type 1
   #check t1 -- Type 2
   ```
-  
   #pause
+
   Keep on doing this:
   ```lean
   #check Nat      -- Type
@@ -708,20 +723,20 @@
   #pause
   #v(0.5cm)
 
-  Standard Type Universe `Type 0`.\
-  Data types: `Nat : Type 0`, `Float : Type 0`, ...\
-  Function Types on Data also `Nat -> Nat : Type 0`.
+  Standard Type Universe `Type 0`. Who lives here?\
+  - Data types: `Nat : Type`, `String : Type`
+  - Function Types on Data `Nat → Nat : Type`.
   #pause
   #v(0.5cm)
 
-  One abstraction level higher: `Type 1`.\
-  `Type 0` itself: `Type 0 : Type 1`.\
-  Type constructors: `Type -> Type -> Type : Type 1`
+  One abstraction level higher: `Type 1`. Who lives here?\
+  - `Type 0` itself: `Type 0 : Type 1`.\
+  - Type constructors: `Type → Type → Type : Type 1`
   #pause
   #v(0.5cm)
 
-  Abstracting over all type constructors?\
-  `Type 2`!
+  Abstracting over all type constructors? `Type 2`!
+  - Functions from type constructor to other type constructor.
   #pause
   #v(0.5cm)
 
@@ -797,34 +812,34 @@
   *Types in `Prop` are propositions.*\
   For example: `p : Prop` and `q : Prop`.
   #pause
-  #v(1cm)
+  #v(0.5cm)
 
-  What's the meaning of terms in this universe?\
-  For example: `hp : p` and `hq : q`?
-  #pause
-
+  What's the meaning of terms `hp : p` and `hq : q`?\
   Herein lies the magic! *A term is a proof*!
   #pause
-  #v(1cm)
+  #v(0.5cm)
 
-  Types are propositions.
-  Terms are proofs/witnesses.
-
-  $t : T$ means $t$ is a witness to the truth of $T$.
-
-  There can be multiple distinct proofs/witnesses/terms of the same proposition.
-  But we don't care. *Proof-Irrellevance*. We only care about inhabitedness.
+  // meaning of typing judgement in `Prop`
+  $ t : T quad <==> quad t "is a witness to the truth of" T $
+  #pause
 
   The prove a proposition is to construct it's term!\
-  And validating the proof is just typechecking the expression!
+  Lean can validate the witness/proof by just typechecking it!
+  #pause
 
-  "$T$ is inhabited" $<=>$ there are terms of type $T$.
-  "$T$ is uninhabited" $<=>$ there are _no_ terms of type $T$.
+  There could be multiple witnesses to the same proposition.
+  #pause
+
+  We don't care: *Proof-Irrelevance*! We only care about *Inhabitedness*.\
+  $
+    T "is inhabited" &<=> "there are terms of type" T \
+    T "is uninhabited" &<=> "there are no terms of type" T
+  $
 ]
 
 #polylux-slide[
   = Functions between Propositions
-  We have our two propositions
+  We have two arbitrary propositions
   ```lean
   variable (p q : Prop)
   ```
@@ -839,7 +854,7 @@
   #v(1cm)
 
   Given proof `hp : p` and function `f : p → q`,
-  we can get `hq : q := f hp`!\
+  we can get `hq : q := f hp`.\
   Known as *modus ponens* or *implication elimination*.
   #pause
 
@@ -890,14 +905,17 @@
 
 #polylux-slide[
   = Logical Constant `True`
-  
+  #pause
+ 
   `True` is simply true.\
   Get Proof for free:
   ```lean
   def t : True := True.intro
   ```
+  #pause
 
   But introduction-only. No Elemination. It just exists.
+  #pause
 
   It's the unit type by CH. It is _uniquely_ inhabited by
   the 0-tuple `()`.
@@ -905,19 +923,23 @@
 
 #polylux-slide[
   = Logical Constant `False`
+  #pause
 
   Represents a contradiction. You shouldn't be able to obtain.
   ```lean
   def f : False := -- impossible
   ```
+  #pause
 
-  Opposite of `True`:\
+  Opposite of `True`:
   No introduction. Elemination-Only.
+  #pause
 
-  Most powerful elimination. Anything follows from a contradiction / `False`.
+  Most powerful elimination. Anything follows from a contradiction.
   ```lean
   false.elim : ∀ (q : Prop), False → q
   ```
+  #pause
 
   If we include `False` as axiom in our type system, it becomes *unsound*.
   ```lean
@@ -925,19 +947,13 @@
   variable (q : Prop)
   theorem hq : q := false.elim
   ```
+  #pause
 
   Is empty type by CH. The uninhabitated type, that has no terms.
+  #pause
 
   Even though no introduction, still appears in formula.
-  
   ```lean
-  example : p ∨ False ↔ p := Iff.intro
-    (λ h ↦ h.elim
-      (λ hp ↦ hp)
-      (λ hf ↦ False.elim hf)
-    )
-    (λ hp ↦ Or.inl hp)
-
   example : p ∧ False ↔ False := Iff.intro
     (λ hpf ↦ hpf.right)
     (λ hf ↦ hf.elim)
@@ -946,17 +962,24 @@
 ]
 
 #polylux-slide[
-  = Logical Negation
+  = Logical Negation $not$
+  Makes use of `False`
+  #pause
 
-  Negation $not p$ in Lean is defined as `p -> False`.
+  Negation `¬p` in Lean is defined as `p → False`.
+  #pause
+  #v(0.5cm)
 
-  How introduction and how elemination?
-
+  Elimination:\
   If you got a `hp : p` and a `hnp : p -> False` you would obtain a contradiction.
+  #pause
+  #v(0.5cm)
 
+  We can proof how to get *contraposition* of implication.
   ```lean
   example : (p → q) → (¬q → ¬p) :=
-    λ hpq ↦ λ hnq ↦ λ hp ↦ hnq (hpq hp)
+    λ (hpq : p → q) ↦ 
+      λ hnq ↦ λ hp ↦ hnq (hpq hp)
   ```
 ]
 
@@ -982,24 +1005,35 @@
     [Not], $not A$, $A -> tack.t$, [Function to Empty Type],
     [And / Conjunction], $A and B$, $A times B$, [Product Type],
     [Or / Disjunction], $A or B$, $A + B$, [Sum Type],
-    //[For All / Universal Quantification], $forall a in A, P(a)$, $Pi a : A. space P(a)$, [Dependent Product Type],
-    //[Exists / Existential Quantification], $exists a in A, P(a)$, $Sigma a : A. space P(a)$, [Dependent Sum Type],
   )
 ]
 
 #polylux-slide[
   = Predicate Logic in Lean
+  #pause
+  #v(0.5cm)
 
   Unary Predicate can be represented as
   ```lean
   variable (α : Type) (p : α → Prop)
   ```
+  #pause
 
   Given `x : α`, then `p x` denotes the assertion that `p` holds of `x`.
+  #pause
+  #v(0.5cm)
 
-  `r : α → α → Prop` denotes a binary relation on `α`: given `x y : α` then,
-  `r x y` denotes the assertion that `x` is related to `y`.
+  Binary Relation on `α` is `r : α → α → Prop`.\
+  Given `x y : α` then, `r x y` denotes the assertion that `x` is related to `y`.
+  #pause
+  #v(0.5cm)
 
+
+  Type for *Universal Quantification*: `∀ x : α, p x`\
+  Type for *Existential Quantification*: `∃ x : α, p x`\
+  #pause
+  #v(0.5cm)
+  
   ```lean
   variable (men : Type) (barber : men)
   variable (shaves : men → men → Prop)
@@ -1011,125 +1045,47 @@
 ]
 
 #polylux-slide[
-  = Universal Quantification $forall$
-  Called "Universal" because it's a big *conjunction over the whole type universe*!
+  = Defining Mathematical Objects in Lean
+  #v(1cm)
+  ```lean
+  structure Group (α : Type u) where
+  op : α → α → α
+  id : α
+  inv : α → α
+  op_assoc : ∀ a b c, op (op a b) c = op a (op b c)
+  op_idl : ∀ a, op id a = a
+  op_invl : ∀ a, op (inv a) a = id
+  ```
+  #pause
+  #v(2cm)
 
-  The forall quantifier `∀ x : Nat, p x` is really just a function `Nat -> Prop`
+  Proofs in *Term-Mode* can get lengthy!
+  #text(11pt)[
+  ```lean
+  -- A group with a left inverse also has a right inverse.
+  theorem op_invr {α : Type u} (G : Group α) : ∀ a, G.op a (G.inv a) = G.id :=
+    λ a ↦
+    calc G.op a (G.inv a)
+      _ = G.op G.id (G.op a (G.inv a)) := Eq.symm (G.op_idl (G.op a (G.inv a)))
+      _ = G.op (G.op (G.inv (G.inv a)) (G.inv a)) (G.op a (G.inv a)) := congrArg (λ l ↦ G.op l (G.op a (G.inv a))) (Eq.symm (G.op_invl (G.inv a)))
+      _ = G.op (G.inv (G.inv a)) (G.op (G.inv a) (G.op a (G.inv a))) := G.op_assoc (G.inv (G.inv a)) (G.inv a) (G.op a (G.inv a))
+      _ = G.op (G.inv (G.inv a)) (G.op (G.op (G.inv a) a) (G.inv a)) := congrArg (G.op (G.inv (G.inv a))) (Eq.symm (G.op_assoc (G.inv a) a (G.inv a)))
+      _ = G.op (G.inv (G.inv a)) (G.op G.id (G.inv a)) := congrArg (λ l ↦ G.op (G.inv (G.inv a)) (G.op l (G.inv a))) (G.op_invl a)
+      _ = G.op (G.inv (G.inv a)) (G.inv a) := congrArg (G.op (G.inv (G.inv a))) (G.op_idl (G.inv a))
+      _ = G.id := G.op_invl (G.inv a)
+  ```
+  ]
 ]
 
-#polylux-slide[
-  = Existential Quantification $exists$
-
-  Existance Quantifier "Existance" => Big disjunction over the whole universe.
-
-  `∃ x, p x` is defined as `¬(∀ x, p x)`
-  Existance is just $not forall$.
-]
-
-#polylux-slide[
-  = Constructive vs. Nonconstructive Math
-
-  Two types of logical arguments / proofs.
-
-  Example:
-
-  Is there an $x > 2$ such that $2^x = x^2$?
-
-  - Constructive: Yes, 4.
-  - Nonconstructive: Yes, because Intermediate Value theorem.
-
-  //A non-constructive proof of $"P" = "NP"$, would be very disappointing.
-  // As it wouldn't give a recipe for constructing such algorithms.
-
-  The computational logic we looked at so far is completly constructive.
-  Meaning that every existance proof made like this,
-  would result in a construction of the postulated object.
-  
-  This is in contrast to Classical Logic, which is usally used
-  in university courses.
-
-  The only difference between the two is one axiom!
-  The *Law of Excluded Middle* (EM).
-  It assumes that $p or not p$ is true.
-  So it creates a term of type `p or not p` out of thin air.
-
-  Using it we can prove double negation, as well as the proof pattern
-  of proof by contradiction. (only possible in classical logic!).
-
-  Proofs involving EM might not construct the mathematical object at hand.
-  But only proof that such an object exists.
-
-  
-Explained Lean's constructive mathematics—each proof explicitly constructs what it claims exists.
-
-Constructive/Intuistionic vs Classical Logic.
-
-There is a single axiom that governs this:
-*Law of Excluded Middle* (EM)
-Double Negation
-Binary Logic and Philosphical Implications
-Non-constructive Existence Proofs
-Proof by contradiction.
-Proof by case distinction
-De Morgan's law
-
-
-
-Because the law of excluded middle does not hold, there is no term of type
-$Pi a. space A + (A -> tack.t)$. Likewise, double
-negation does not hold, so there is no term of type 
-$Pi A. space ((A -> tack.t) -> tack.t) -> A$.
-
-It is possible to include the law of excluded middle and double negation into
-a type theory, by rule or assumption. However, terms may not compute down to
-canonical terms and it will interfere with the ability to determine if two terms
-are judgementally equal to each other.
-WHAT DOES THIS MEAN?
-
-Constructive Mathematics is powerful in the sense that there is always a computational recipe for
-creating the stipulated mathematical object.
-But it's also less powerful in the sense, that fewer mathematical statements can be proven this way.
-
-An example of a non-constructive proof is proof by contradiction. The first
-step is assuming that $x$ does not exist and refuting it by contradiction.
-The conclusion from that step is "it is not the case that $x$ does not exist".
-The last step is, by double negation, concluding that $x$ exists. Constructive
-mathematics does not allow the last step of removing the double negation to
-conclude that $x$ exists.
-
-Lean supports both and does a seperation of concerns.
-Lean supports classical reasoning through the `Classical` namespace. `open Classical`
-]
-
-#polylux-slide[
-Relation known from set theory. But relations are more fundamental and can be formulated directly
-in logic/type theory.
-Define relation as`alpha -> alpha -> Prop`
-
-
-Define Aequivalence Relation in Lean Code:
-- Reflexiv
-- Symmetric
-- Transitive
-
-]
 
 #polylux-slide[
   = Tactic Mode
 
-  
-So far we've only seen Lean in *term-mode*. But actually for writing more complicated proofs,
-this is used only very rarely. Instead there is *tactic-mode*.
-Here the *automated proof writing* of lean comes into play.
+  Different way of writing proofs using *Tactic-Mode*.\
+  Here the *automated proof writing* of Lean comes into play.
 
+  This makes Lean an _Interactive_ Theorem Prover.
 
-The Lean Theorem Prover aims to bridge the gap between interactive and automated
-theorem proving, by situating automated tools and methods in a framework that
-supports user interaction and the construction of fully specified axiomatic
-proofs. The goal is to support both mathematical reasoning and reasoning about
-complex systems, and to verify claims in both domains.
-
-  In tactic mode:
   ```lean
   theorem and_comm (p q : Prop) : p ∧ q → q ∧ p := by
     intro h            -- assume p ∧ q with proof h, the goal is q ∧ p
@@ -1142,18 +1098,18 @@ complex systems, and to verify claims in both domains.
 #polylux-slide[
   = Inductive types
 
-  The natural numbers can be defined as an inductive type. This definition is
-  based on the Peano axioms and states that every natural number is either zero or
-  the successor of some other natural number.
+  The natural numbers can be defined inductively.\
+  Definition inspired by *Peano Axioms*.
 
   ```lean
   inductive Nat : Type
   | zero : Nat
   | succ : Nat → Nat
   ```
+  #pause
+  #v(0.5cm)
 
-  Addition of natural numbers can be defined recursively, using pattern matching.
-
+  Addition of natural numbers can be defined recursively, using *pattern matching*.
   ```lean
   def Nat.add : Nat → Nat → Nat
   | n, Nat.zero   => n                      -- n + 0 = n  
@@ -1162,33 +1118,96 @@ complex systems, and to verify claims in both domains.
 ]
 
 #polylux-slide[
+  = Constructive vs. Non-Constructive Math
+  There are two kinds of logical arguments.
+  #pause
+
+  Is there an $x > 2$ such that $2^x = x^2$?
+  #pause
+
+  - Constructive: Yes, 4.
+  - Nonconstructive: Yes, because Intermediate Value theorem.
+  #pause
+  #v(0.5cm)
+
+  // The computational logic we've seen so far was constructive.
+  // Every proof term we created will also provide a receipe for finding the postulated object.
+
+  // Constructive Mathematics is great, since it always gives you receipe
+  // for constructing the postulated mathematical object.
+
+  // Imangine a non-constructive proof of $"P" = "NP"$. This would be very disappointing.
+  // As it would tell us that there exist algorithms for hard problems that run in polynomial time.
+  // But the proof would tell us how to create such an algorithm :(
+  Constructive Proofs are better!\
+  Example: $"N" = "NP"$.
+  #pause
+  #v(0.5cm)
+
+  But classical logic can proof more statements.\
+  Lean by computational nature is constructive, but classical logic also possible.
+  #pause
+
+  Governed by a single axiom: The *Law of Excluded Middle* (EM)\
+  ```lean
+  Classical.em (p : Prop) : p ∨ ¬p
+  ```
+  #pause
+
+  This now opens the door for many thing we take for granted.\
+  - Proof by Contradiction and Proof by Case Distinction
+  - Double Negation $not not p eq.triple p$
+
+  Only this makes logic binary! Denk mal drüber nach...
+]
+
+
+#polylux-slide[
   = Mathlib Showcase
+
+  https://leanprover-community.github.io/mathlib-overview.html
+
+  https://leanprover-community.github.io/mathlib4_docs/
 ]
 
 #polylux-slide[
-  = VScode Extension
+  = Write Lean Code yourself
+  #v(1cm)
+
+  - Online on\
+    https://live.lean-lang.org/
+
+  - In VsCode using the extension "Lean 4"
 ]
 
 #polylux-slide[
   = Further Reading
   
-  "Theorem Proving in Lean4"
-  - https://leanprover-community.github.io/logic_and_proof
+  - Lean Book "Theorem Proving in Lean4"\
+    https://leanprover.github.io/theorem_proving_in_lean4
+  - Another Lean Book "Logic and Proof"\
+    https://leanprover-community.github.io/logic_and_proof
 
-  Some other resources:
-  - https://leanprover.github.io/theorem_proving_in_lean4/
+  - YT: "Why Vlad Tenev and Tudor Achim of Harmonic Think AI Is About to Change Math—and Why It Matters"\
+    https://youtu.be/NvAxuCIBb-c?si=Nhs6o-79xwwMKA2Z
+  - YT: "Type Theory for the Working Rustacean - Dan Pittman"
+    https://youtu.be/BdXWlQsd7RI?si=7ZhTNCOl6e3P12ds
 
-  Youtube:
-  - https://youtu.be/NvAxuCIBb-c?si=Nhs6o-79xwwMKA2Z
-    Why Vlad Tenev and Tudor Achim of Harmonic Think AI Is About to Change Math—and Why It Matters
-
-  - https://youtu.be/BdXWlQsd7RI?si=7ZhTNCOl6e3P12ds
-    Type Theory for the Working Rustacean - Dan Pittman
-
-  = Beyond "just" Type Theory: Homotopy Type Theory (HoTT) #emoji.face.explode
-  - https://youtube.com/playlist?list=PL245PKGUDdcN9-El9D7DRefwX4c9feiYq&si=RnAo2CUVPXfPNqkf
+  - Beyond "just" Type Theory: Homotopy Type Theory (HoTT) #emoji.face.explode\
+    https://youtube.com/playlist?list=PL245PKGUDdcN9-El9D7DRefwX4c9feiYq&si=RnAo2CUVPXfPNqkf
 ]
 
 #polylux-slide[
-  = References
+  #align(center + horizon)[#text(80pt)[
+    Thank U :)
+  ]]
+]
+
+#polylux-slide[
+  = These Slides are on GitHub
+  #v(2cm)
+
+  #image("res/github-qr.svg", height: 50%)
+  https://github.com/luiswirth/zuccmap2024fs
+
 ]

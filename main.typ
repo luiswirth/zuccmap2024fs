@@ -1202,12 +1202,3 @@
     Thank U :)
   ]]
 ]
-
-#polylux-slide[
-  = These Slides are on GitHub
-  #v(2cm)
-
-  #image("res/github-qr.svg", height: 50%)
-  https://github.com/luiswirth/zuccmap2024fs
-
-]

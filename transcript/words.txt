@@ -1,9 +1,0 @@
-lean
-lean4
-type theory
-Curry-Howard isomorphism
-Girard's paradox
-Russell's paradox
-Prop
-lambda
-cumulative
